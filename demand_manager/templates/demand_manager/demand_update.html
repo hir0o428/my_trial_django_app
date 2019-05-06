@@ -1,0 +1,13 @@
+{% extends "./base.html" %}
+{% load crispy_forms_tags %}
+{% block page_title %} Demand Manager Demand Creation {% endblock%}
+{% block content %}
+<div style="padding:20px 200px 0px 200px;">
+    <form action="" method="POST">
+        {{ form|crispy }}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-lg">Update</button>
+        <a href="/demand_manager/" class="btn btn-primary btn-lg">Back</a>
+    </form>
+</div>
+{% endblock %}

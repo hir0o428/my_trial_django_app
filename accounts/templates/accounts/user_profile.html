@@ -1,0 +1,28 @@
+{% extends "./base.html" %}
+{% block page_title %} Demand Manager User Profile {% endblock %}
+{% block content %}
+<div style="margin:20px">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>User Name</th>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th>Mail Address</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Last Name</th>
+                <td>{{ user.last_name }}</td>
+            </tr>
+            <tr>
+                <th>First Name</th>
+                <td>{{ user.first_name }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{% url 'accounts:profile_update' user.pk %}" class="btn btn-primary ">Update</a>
+    <a href="{% url 'accounts:password' user.pk %}" class="btn btn-primary">Change Password</a>
+</div>
+{% endblock %}

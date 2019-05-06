@@ -1,0 +1,25 @@
+{% extends "./base.html" %}
+{% block page_title %} Demand Manager Login {% endblock%}
+{% block content %}
+<div style="padding-top: 50px;">
+    <form action="" method="POST">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                        {{ field }}
+                        {{ field.errors }}
+                        <hr>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-lg btn-primary btn-block" >Login</button>
+                    <input type="hidden" name="next" value="{{ next }}" />
+                    {% csrf_token %}
+                    <a class="btn btn-lg btn-outline-primary btn-block mt-2"
+                       href="/accounts/user_registration/"> User Registration</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "./base.html"%}
+
+{% block page_title %}Demand Manager Top{% endblock %}
+
+{% block content %}
+    <div>
+        <h1><a href="/demand_manager">Demand Manager</a></h1>
+    </div>
+
+    <div>
+        <h2>Demand List</h2>
+        <ul>
+        {% for demand in object_list %}
+            <li><a href="{% url 'demand_manager:detail' demand.id %}">{{ demand.product }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+    <a class="btn btn-primary" href="/demand_manager/create/"><i class="far fa-calendar-plus"></i> Demand Create </a>
+{% endblock %}
