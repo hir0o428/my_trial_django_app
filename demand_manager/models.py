@@ -72,11 +72,11 @@ class Technology(models.Model):
         null=False,
     )
 
-    lic_16nm = models.BooleanField(
+    lic_feature_16nm = models.BooleanField(
         verbose_name='16nm',
     )
 
-    peak_lic_7nm = models.BooleanField(
+    lic_feature_7nm = models.BooleanField(
         verbose_name='7nm',
     )
     user_create = models.ForeignKey(
@@ -121,12 +121,12 @@ class Demand(models.Model):
         blank=False,
         null=False,
     )
-    technology = models.ForeignKey(
+    tech_node = models.ForeignKey(
         Technology,
-        verbose_name='Technology',
+        verbose_name='Technology Node',
         blank=False,
         null=True,
-        related_name='technology',
+        related_name='techNode',
         on_delete=models.SET_NULL,
     )
     content = models.ForeignKey(

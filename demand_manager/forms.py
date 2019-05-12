@@ -20,7 +20,7 @@ class DemandCreateForm(forms.ModelForm):
     class Meta:
         model = Demand
         fields = (
-            'product', 'technology',
+            'product', 'tech_node',
             'content',
             'start_date', 'end_date',
             'frequency', 'comment'
@@ -59,7 +59,7 @@ class DemandUpdateForm(forms.ModelForm):
     class Meta:
         model = Demand
         fields = (
-            'product', 'technology',
+            'product', 'tech_node',
             'content',
             'start_date', 'end_date',
             'frequency', 'comment'
