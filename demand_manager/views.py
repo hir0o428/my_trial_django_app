@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from .models import Demand
 from .forms import LoginForm, DemandCreateForm, DemandUpdateForm
-
+from demand_manager.utils.demand_summary import DemandFeature
 
 # Create your views here.
 class DemandLoginView(LoginView):
@@ -76,3 +76,18 @@ class DemandUpdateView(LoginRequiredMixin, UpdateView):
 class DemandDeleteView(LoginRequiredMixin, DeleteView):
     model = Demand
     success_url = '/demand_manager'
+
+
+class DemandAnalysisVeiw(LoginRequiredMixin, ListView):
+    model = Demand
+    template_name = 'demand_manager/demand_analysis.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Calc Demand Feature
+        demand_feature = DemandFeature()
+        demand_feature.demand_summary()
+        df_demand_feature = demand_feature.df_demand_feature
+        context['df_demand_feature'] = df_demand_feature
+        return context
+

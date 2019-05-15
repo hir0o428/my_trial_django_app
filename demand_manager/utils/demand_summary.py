@@ -59,14 +59,14 @@ class DemandFeature:
             dict_data = {}
             for base_feature in self.list_base_feature:
                 if self.df_content.at[content, base_feature]:
-                    dict_data[base_feature] = np.array([frequency] * len(list_date), dtype='int8')
+                    dict_data[base_feature] = np.array([frequency] * len(list_date), dtype='int32')
                 else:
-                    dict_data[base_feature] = np.array([0] * len(list_date), dtype='int8')
+                    dict_data[base_feature] = np.array([0] * len(list_date), dtype='int32')
             for tech_feature in self.list_tech_feature:
                 if self.df_tech.at[tech_node, tech_feature]:
-                    dict_data[tech_feature] = np.array([frequency] * len(list_date), dtype='int8')
+                    dict_data[tech_feature] = np.array([frequency] * len(list_date), dtype='int32')
                 else:
-                    dict_data[tech_feature] = np.array([0] * len(list_date), dtype='int8')
+                    dict_data[tech_feature] = np.array([0] * len(list_date), dtype='int32')
             df_product = pd.DataFrame(dict_data, index=list_date)
 
             # Add DataFrame(Product) to DataFrame()
@@ -74,7 +74,7 @@ class DemandFeature:
 
     def create_demand_figure(self):
         # Setup PNG dir
-        png_dir = "./demand_manager/static/demand_manager/PNG/"
+        png_dir = "demand_manager/static/demand_manager/PNG/"
         if not os.path.isdir(png_dir):
             os.makedirs(png_dir)
         for lic_feature in self.df_demand_feature.columns:

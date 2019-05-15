@@ -1,0 +1,50 @@
+{% extends "./base.html"%}
+
+{% block page_title %}Demand Manager Top{% endblock %}
+
+{% block content %}
+    <div>
+        <h1><a href="/demand_manager">Demand Manager</a></h1>
+    </div>
+
+    <div>
+        <h2>Demand Analysis</h2>
+        {% load static %}
+        <img src="{% static 'demand_manager/PNG/lic_feature_base_a.png' %}">
+
+        <!--
+        <div>
+            <table class="table table-bordered table-striped table-light">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Date</th>
+                        <th>License Feature Base A</th>
+                        <th>License Feature Base B</th>
+                        <th>License Feature Base C</th>
+                        <th>License Feature Option 1</th>
+                        <th>License Feature Option 2</th>
+                        <th>License Feature Option 3</th>
+                        <th>License Feature tech 16nm</th>
+                        <th>License Feature tech 7nm</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for index, row in df_demand_feature.iterrows %}
+                    <tr>
+                        <td>{{ index|date:"Y/m/d" }}</td>
+                        <td>{{ row.lic_feature_base_a }}</td>
+                        <td>{{ row.lic_feature_base_b }}</td>
+                        <td>{{ row.lic_feature_base_c }}</td>
+                        <td>{{ row.lic_feature_opt_1 }}</td>
+                        <td>{{ row.lic_feature_opt_2 }}</td>
+                        <td>{{ row.lic_feature_opt_3 }}</td>
+                        <td>{{ row.lic_feature_16nm }}</td>
+                        <td>{{ row.lic_feature_7nm }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        -->
+    </div>
+{% endblock %}
