@@ -87,7 +87,7 @@ class DemandAnalysisVeiw(LoginRequiredMixin, ListView):
         # Calc Demand Feature
         demand_feature = DemandFeature()
         demand_feature.demand_summary()
-        df_demand_feature = demand_feature.df_demand_feature
-        context['df_demand_feature'] = df_demand_feature
+        context['df_demand_feature'] = demand_feature.df_demand_feature
+        context['ser_png_path'] = demand_feature.ser_png_path
         return context
 

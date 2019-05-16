@@ -1,9 +1,10 @@
-from datetime import date
-import re
-import pandas as pd
-import numpy as np
 import os
 import os.path
+from datetime import date
+import re
+import math
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 from django_pandas.io import read_frame
@@ -36,6 +37,14 @@ class DemandFeature:
         self.list_date = pd.date_range(start=self.start_date, end=self.end_date, freq='D')
         # Create Initial DataFrame of Feature
         self.df_demand_feature = pd.DataFrame(index=self.list_date, columns=self.list_feature)
+
+        # Setup PNG dir
+        self.png_static_dir = "demand_manager/PNG/"
+        self.png_dir = "demand_manager/static/" + self.png_static_dir
+
+        # PNG Dictionary
+        self.list_png = []
+        self.ser_png_path = pd.Series()
 
     def demand_summary(self):
 
@@ -73,14 +82,15 @@ class DemandFeature:
             self.df_demand_feature = self.df_demand_feature.add(df_product, fill_value=0)
 
     def create_demand_figure(self):
-        # Setup PNG dir
-        png_dir = "demand_manager/static/demand_manager/PNG/"
-        if not os.path.isdir(png_dir):
-            os.makedirs(png_dir)
+        if not os.path.isdir(self.png_dir):
+            os.makedirs(self.png_dir)
         for lic_feature in self.df_demand_feature.columns:
-            self.create_demand_date_png(lic_feature, png_dir)
+            self.create_demand_date_png(lic_feature)
 
-    def create_demand_date_png(self, lic_feature, png_dir):
+        # Series of PNG path
+        self.ser_png_path = pd.Series(self.list_png, index=self.df_demand_feature.columns)
+
+    def create_demand_date_png(self, lic_feature):
         # Setup PNG name
         png_name = lic_feature + ".png"
 
@@ -98,12 +108,16 @@ class DemandFeature:
         # label
         ax.set_xlabel('Date')
         ax.set_ylabel('Demand [%]')
-        # plt.ylim([0,])
+        ylim_max = max(y.max() * 1.1, math.ceil(y.max() / 100) * 100, y.max() + 50)
+        plt.ylim([0, ylim_max])
 
         # Title
         ax.set_title(lic_feature)
 
         # Save as PNG
         fig.tight_layout()
-        plt.savefig(png_dir + png_name)
+        plt.savefig(self.png_dir + png_name)
+
+        # Add PNG list
+        self.list_png.append(self.png_static_dir + png_name)
 

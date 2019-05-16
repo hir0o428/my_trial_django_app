@@ -10,7 +10,9 @@
     <div>
         <h2>Demand Analysis</h2>
         {% load static %}
-        <img src="{% static 'demand_manager/PNG/lic_feature_base_a.png' %}">
+        {% for index, png_path in ser_png_path.iteritems %}
+            <img src="{% static png_path %}" title="{{ index }}">
+        {% endfor %}
 
         <!--
         <div>
