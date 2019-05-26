@@ -9,11 +9,26 @@
 
     <div>
         <h2>Demand List</h2>
-        <ul>
-        {% for demand in object_list %}
-            <li><a href="{% url 'demand_manager:detail' demand.id %}">{{ demand.product }}</a></li>
-        {% endfor %}
-        </ul>
+        <table class="table table-bordered table-striped table-light">
+            <thead>
+                <tr class="table-primary">
+                    <th scope="col">Product</th>
+                    <th scope="col">Technology Node</th>
+                    <th scope="col">Verification</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for demand in object_list %}
+                    <tr>
+                        <th scope="row">
+                            <a href="{% url 'demand_manager:detail' demand.id %}">{{ demand.product }}</a>
+                        </th>
+                        <td>{{ demand.tech_node }}</td>
+                        <td>{{ demand.content }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     <a class="btn btn-primary" href="/demand_manager/create/"><i class="far fa-calendar-plus"></i> Demand Create </a>
 {% endblock %}

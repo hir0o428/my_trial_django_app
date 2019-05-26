@@ -4,7 +4,8 @@ from . import views
 app_name = 'demand_manager'
 urlpatterns = [
     # ex: /demand_manager/
-    path('', views.DemandTopView.as_view(), name='top'),
+    # path('', views.DemandTopView.as_view(), name='top'),
+    path('', views.DemandTopFilterView.as_view(), name='top'),
 
     # ex: /demand_manager/login/
     path('login/', views.DemandLoginView.as_view(), name='login'),
@@ -20,5 +21,5 @@ urlpatterns = [
     # ex: /demand_manager//2/delete
     path('<int:pk>/delete/', views.DemandDeleteView.as_view(), name='delete'),
     # ex: /demand_manager/analysis/
-    path('analysis/', views.DemandAnalysisVeiw.as_view(), name='analysis'),
+    path('analysis/', views.DemandAnalysisView.as_view(), name='analysis'),
 ]

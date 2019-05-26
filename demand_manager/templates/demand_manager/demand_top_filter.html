@@ -1,0 +1,80 @@
+{% extends "./base.html"%}
+{% load crispy_forms_tags %}
+
+{% block page_title %}Demand Manager Top{% endblock %}
+
+{% block content %}
+    <div>
+        <h1><a href="/demand_manager">Demand Manager</a></h1>
+    </div>
+
+    <div class="container">
+        <h2>Demand List</h2>
+        <div class="modal fade" id="DemandFilterModal" tabindex="-1" role="dialog"
+             aria-labelledby="DemandFilterModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Search Condition</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="filter" method="get">
+                        <div class="modal-body">
+                            {{ filter.form|crispy }}
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-info" form="filter">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <a class="btn btn-primary" href="/demand_manager/create/">
+                <i class="far fa-calendar-plus"></i> Demand Create </a>
+            <div class="float-right">
+                <a class="btn btn-info" data-toggle="modal" data-target="#DemandFilterModal" href="#">
+                    <i class="fas fa-search"></i> Search </a>
+                <a class="btn btn-secondary filtered" href="/demand_manager/?page=1"> Clear Search Condition </a>
+                </div>
+        </div>
+        <table class="table table-bordered table-striped table-light">
+            <thead>
+                <tr class="table-primary">
+                    <th scope="col">Product</th>
+                    <th scope="col">Technology Node</th>
+                    <th scope="col">Verification</th>
+                    <th scope="col">Date of Start</th>
+                    <th scope="col">Date of End</th>
+                    <th scope="col">Frequency [%]</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for demand in object_list %}
+                    <tr>
+                        <th scope="row">
+                            <a href="{% url 'demand_manager:detail' demand.id %}">{{ demand.product }}</a>
+                        </th>
+                        <td>{{ demand.tech_node }}</td>
+                        <td>{{ demand.content }}</td>
+                        <td>{{ demand.start_date|date:"Y/m/d" }}</td>
+                        <td>{{ demand.end_date|date:"Y/m/d"}}</td>
+                        <td>{{ demand.frequency }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div>
+            <a class="btn btn-primary" href="/demand_manager/create/">
+                <i class="far fa-calendar-plus"></i> Demand Create </a>
+            <div class="float-right">
+                <a class="btn btn-info" data-toggle="modal" data-target="#DemandFilterModal" href="#">
+                    <i class="fas fa-search"></i> Search </a>
+                <a class="btn btn-secondary filtered" href="/demand_manager/?page=1"> Clear Search Condition</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

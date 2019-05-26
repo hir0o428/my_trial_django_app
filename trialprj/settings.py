@@ -25,21 +25,25 @@ SECRET_KEY = 'g#vlva&g0)u_l%_qdp#@*4gvn)6i#-uu9)0&7^$*xpdxd+#luo'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    '.pythonanywhere.com',
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'crispy_forms',
-    'accounts.apps.AccountsConfig',
-    'demand_manager.apps.DemandManagerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts.apps.AccountsConfig',
+    'demand_manager.apps.DemandManagerConfig',
+    'crispy_forms',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

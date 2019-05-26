@@ -4,6 +4,45 @@ from accounts.models import User
 # Create your models here.
 
 
+class Release(models.Model):
+    BaseLicense = 'Base'
+    PeakLicense = 'Peak'
+    lic_type_choice = [
+        (BaseLicense, 'Base License'),
+        (PeakLicense, 'Peak License'),
+    ]
+    lic_type = models.CharField(
+        verbose_name='License Type',
+        max_length=20,
+        choices=lic_type_choice,
+        blank=False,
+        null=False,
+    )
+    lic_feature = models.CharField(
+        verbose_name='License Feature',
+        max_length=20,
+        blank=False,
+        null=False,
+    )
+    start_date = models.DateField(
+        verbose_name='Start Date',
+        blank=False,
+        null=False,
+    )
+    end_date = models.DateField(
+        verbose_name='End Date',
+        blank=False,
+    )
+    num_lic_feature = models.IntegerField(
+        verbose_name='Number of Released License Feature',
+        blank=False,
+        null=False,
+    )
+
+    def __str__(self):
+        return self.lic_feature + "(" + self.lic_type + ")"
+
+
 class VerificationContent(models.Model):
     content = models.CharField(
         verbose_name='Verification Content',

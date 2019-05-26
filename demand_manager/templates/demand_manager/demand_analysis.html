@@ -1,6 +1,7 @@
 {% extends "./base.html"%}
+{% load crispy_forms_tags %}
 
-{% block page_title %}Demand Manager Top{% endblock %}
+{% block page_title %}Demand Manager (Analysis){% endblock %}
 
 {% block content %}
     <div>
@@ -9,10 +10,87 @@
 
     <div>
         <h2>Demand Analysis</h2>
-        {% load static %}
-        {% for index, png_path in ser_png_path.iteritems %}
-            <img src="{% static png_path %}" title="{{ index }}">
-        {% endfor %}
+        <div class="container">
+            <h3>Required License Features</h3>
+            <div class="modal fade" id="AnalysisDateFilterModal" tabindex="-1" role="dialog"
+                  aria-labelledby="AnalysisDateFilterModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Date Filter</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="filter" method="get">
+                            <div class="modal-body">
+                                {{ filter.form|crispy }}
+                                {% csrf_token %}
+                            </div>
+                        </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-info" form="filter">Date Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="float-right">
+                <a class="btn btn-info" data-toggle="modal" data-target="#AnalysisDateFilterModal" href="#">
+                    <i class="fas fa-search"></i> Date Filter </a>
+                <a class="btn btn-secondary filtered" href="/demand_manager/analysis/?page=1"> Clear Date Filter </a>
+            </div>
+            <table class="table table-bordered table-striped table-light">
+                <thead>
+                    <tr class="table-primary">
+                        <th></th>
+                        {% for index in ser_required_lic.index %}
+                            <th>{{ index }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Demand [%]</th>
+                        {% for value in ser_pct_demand.values %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th scope="row">Demand</th>
+                        {% for value in ser_num_demand.values %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th scope="row">Released</th>
+                        {% for value in ser_num_release.values %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr class="table-info">
+                        <th scope="row">Required</th>
+                        {% for value in ser_required_lic.values %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <h3>Demand vs Date</h3>
+            {% load static %}
+            {% for index, row in df_png_path.iterrows %}
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><img src="{% static row.0 %}"></td>
+                            <td><img src="{% static row.1 %}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% endfor %}
+        </div>
 
         <!--
         <div>
