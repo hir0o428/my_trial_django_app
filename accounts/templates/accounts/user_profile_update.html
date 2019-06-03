@@ -1,19 +1,10 @@
 {% extends "./base.html" %}
+{% load crispy_forms_tags %}
 {% block page_title %} Demand Manager User Profile Update{% endblock %}
 {% block content %}
 <div style="margin:20px">
     <form action="" method="POST" enctype="multipart/form-data">
-        {{ form.non_field_errors }}
-        <table class="table">
-            <tbody>
-                {% for field in form %}
-                    <tr>
-                        <th><label for="{{ field.id_for_label }}">{{ field.label }}</label></th>
-                        <td>{{ field }} <span style="color:red">{{ field.errors }}</span> </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {{ form|crispy }}
         {% csrf_token %}
         <button type="submit" class="btn btn-success">Update</button>
         <a href="{% url 'accounts:profile' user.pk %}" class="btn btn-primary">Back</a>

@@ -159,6 +159,9 @@ class Demand(models.Model):
         max_length=20,
         blank=False,
         null=False,
+        help_text = "<ul>"
+                    "<li>Required</li>"
+                    "</ul>",
     )
     tech_node = models.ForeignKey(
         Technology,
@@ -192,6 +195,9 @@ class Demand(models.Model):
         verbose_name='Frequency of Use [%]',
         blank=False,
         null=False,
+        help_text = "<ul>"
+                    "<li>Required</li>"
+                    "</ul>",
     )
     comment = models.TextField(
         verbose_name='Comments',

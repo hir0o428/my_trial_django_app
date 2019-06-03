@@ -13,7 +13,7 @@ from demand_manager.models import Demand, VerificationContent, Technology, Relea
 
 
 class DemandFeature:
-    def __init__(self):
+    def __init__(self, start_date, end_date):
         # Demand
         self.qs_demand = Demand.objects.all()
         self.df_demand = read_frame(self.qs_demand)
@@ -28,8 +28,14 @@ class DemandFeature:
 
         # Date
         self.today = date.today()
-        self.start_date = self.df_demand['start_date'].min()
-        self.end_date = self.df_demand['end_date'].max()
+        if start_date is None:
+            self.start_date = self.today
+        else:
+            self.start_date = start_date
+        if end_date is None:
+            self.end_date = self.df_demand['end_date'].max()
+        else:
+            self.end_date = end_date
 
         # Demand DataFrame
         # Create List of License Feature
@@ -48,7 +54,7 @@ class DemandFeature:
         self.ser_required_lic = pd.Series()
 
         # Release DataFrame
-        self.release_feature = ReleaseFeature(self.list_feature)
+        self.release_feature = ReleaseFeature(self.list_feature, self.start_date, self.end_date)
         self.release_feature.create_df_release_feature()
         self.df_release_feature = self.release_feature.df_release_feature
 
@@ -98,6 +104,8 @@ class DemandFeature:
 
             # Add DataFrame(Product) to DataFrame()
             self.df_demand_feature = self.df_demand_feature.add(df_product, fill_value=0)
+        #
+        self.df_demand_feature = self.df_demand_feature[self.start_date:self.end_date].fillna(0)
 
     def get_required_lic(self):
         self.df_release_feature = self.df_release_feature[self.start_date:self.end_date].fillna(0)
@@ -201,14 +209,16 @@ class DemandFeature:
 
 
 class ReleaseFeature:
-    def __init__(self, list_feature):
+    def __init__(self, list_feature, start_date, end_date):
         # Release
         self.qs_release = Release.objects.all()
         self.df_release = read_frame(self.qs_release)
 
         # Date
-        self.start_date = self.df_release['start_date'].min()
-        self.end_date = self.df_release['end_date'].max()
+        # self.start_date = self.df_release['start_date'].min()
+        # self.end_date = self.df_release['end_date'].max()
+        self.start_date = start_date
+        self.end_date = end_date
 
         # Demand DataFrame
         # Create List of License Feature
@@ -239,4 +249,6 @@ class ReleaseFeature:
 
             # Add DataFrame(Product) to DataFrame()
             self.df_release_feature = self.df_release_feature.add(df_feature, fill_value=0)
+        #
+        self.df_release_feature = self.df_release_feature[self.start_date:self.end_date].fillna(0)
 

@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,7 +7,7 @@ from django.shortcuts import resolve_url
 from django.utils import timezone
 
 from .models import Demand
-from .forms import LoginForm, DemandCreateForm, DemandUpdateForm
+from .forms import LoginForm, DemandCreateForm, DemandUpdateForm, DemandAnalysisForm
 from .filters import DemandFilter, DemandAnalysisFilter
 from demand_manager.utils.demand_summary import DemandFeature
 
@@ -103,15 +103,23 @@ class DemandDeleteView(LoginRequiredMixin, DeleteView):
     success_url = '/demand_manager'
 
 
-class DemandAnalysisView(LoginRequiredMixin, FilterView):
-    model = Demand
-    filterset_class = DemandAnalysisFilter
+class DemandAnalysisView(LoginRequiredMixin, FormView):
+    form_class = DemandAnalysisForm
     template_name = 'demand_manager/demand_analysis.html'
+
+    def form_valid(self, form):
+        print("Form saved: {}".format(form))
+        form.save()
+        print("Form saved: {}".format(form))
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        print("Form: {}".format(self.get_form_kwargs()))
+        period_start = self.request.GET.get(key='period_start')
+        period_end = self.request.GET.get(key='period_end')
         # Calc Demand Feature
-        demand_feature = DemandFeature()
+        demand_feature = DemandFeature(period_start, period_end)
         demand_feature.demand_summary()
         context['df_demand_feature'] = demand_feature.df_demand_feature
         context['ser_pct_demand'] = demand_feature.ser_pct_max_demand
@@ -119,4 +127,7 @@ class DemandAnalysisView(LoginRequiredMixin, FilterView):
         context['ser_num_release'] = demand_feature.df_release_feature.max().astype('int64')
         context['ser_required_lic'] = demand_feature.ser_required_lic
         context['df_png_path'] = demand_feature.df_png_path
+        context['period_start'] = period_start
+        context['period_end'] = period_end
         return context
+

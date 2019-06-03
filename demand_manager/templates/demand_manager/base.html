@@ -17,7 +17,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/demand_manager/">Demand Manager</a>
+        <a class="navbar-brand" href="{% url 'demand_manager:top' %}">Demand Manager</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,23 +26,33 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/demand_manager/">
+                    <a class="nav-link" href="{% url 'demand_manager:top' %}">
                         <i class="fas fa-home"></i> Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/demand_manager/create/">
-                        <i class="far fa-calendar-plus"></i> Create</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'demand_manager:create' %}">
+                        <i class="far fa-calendar-plus"></i> Demand Request</a>
                 </li>
+                {% if user.is_staff %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'demand_manager:analysis' %}">
+                        <i class="fas fa-chart-bar"></i> Demand Analysis</a>
+                </li>
+                {% endif %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDoc" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-book"></i> Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownDoc">
-                        <a class="dropdown-item" href="#">Manual</a>
+                        <a class="dropdown-item" href="#">Users Manual</a>
                         <a class="dropdown-item" href="#">Update Plan</a>
+                        {% if user.is_staff %}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Administrator Manual</a>
+                        {% endif %}
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item disabled" href="#">Something else here</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -54,12 +64,14 @@
                         <a class="dropdown-item" href="#">Link #1</a>
                         <a class="dropdown-item" href="#">Link #2</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item disabled" href="#">Something else here</a>
                     </div>
                 </li>
+                <!--
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </li>
+                -->
             </ul>
             <div class="btn-group">
                 <div class="btn dropdown-toggle naviDrop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -72,10 +84,18 @@
                 {% if user.is_authenticated %}
                     <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-item" href="{% url 'accounts:profile' user.pk %}">
-                            <i class="fas fa-users-cog"></i> User Info
+                            <i class="fas fa-user-cog"></i> User Info
                         </a>
+                        {% if user.is_staff %}
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header"> Administrator Menu </h6>
+                            <a class="dropdown-item" href="{% url 'demand_manager:analysis' %}">
+                                <i class="fas fa-chart-bar"></i> Demand Analysis</a>
+                            <a class="dropdown-item" href="/admin/">
+                                <i class="fas fa-users-cog"></i> Setup </a>
+                        {% endif %}
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/demand_manager/logout/">
+                        <a class="dropdown-item" href="{% url 'demand_manager:logout' %}">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
                     </div>

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from datetime import date
+from datetime import date, timedelta
+from dateutil.relativedelta import relativedelta
 
 from .models import Demand
 
@@ -75,3 +76,16 @@ class DemandUpdateForm(forms.ModelForm):
         end_date = self.cleaned_data['end_date']
         if start_date > end_date:
             raise forms.ValidationError("The end date is later than the start date")
+
+
+class DemandAnalysisForm(forms.Form):
+    period_start = forms.DateField(
+        label="Date of Start",
+        initial=date.today(),
+        widget=forms.DateInput(attrs={"type":"date"}),
+    )
+    period_end = forms.DateField(
+        label="Date of End",
+        initial=date.today() + relativedelta(months=1) - timedelta(days=1),
+        widget=forms.DateInput(attrs={"type":"date"}),
+    )

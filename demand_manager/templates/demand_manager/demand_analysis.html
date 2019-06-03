@@ -12,34 +12,20 @@
         <h2>Demand Analysis</h2>
         <div class="container">
             <h3>Required License Features</h3>
-            <div class="modal fade" id="AnalysisDateFilterModal" tabindex="-1" role="dialog"
-                  aria-labelledby="AnalysisDateFilterModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Date Filter</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form id="filter" method="get">
-                            <div class="modal-body">
-                                {{ filter.form|crispy }}
-                                {% csrf_token %}
-                            </div>
-                        </form>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-info" form="filter">Date Filter</button>
+            <div class="float-right">
+                <form method="get">
+                    <div class="form-row">
+                        {{ form|crispy }}
+                        <div class="form-group col-md-4">
+                            <button type="submit" class="btn btn-info"> Set period </button>
+                            <a class="btn btn-secondary filtered" href="/demand_manager/analysis_test/?page=1"> Reset </a>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
-            <div class="float-right">
-                <a class="btn btn-info" data-toggle="modal" data-target="#AnalysisDateFilterModal" href="#">
-                    <i class="fas fa-search"></i> Date Filter </a>
-                <a class="btn btn-secondary filtered" href="/demand_manager/analysis/?page=1"> Clear Date Filter </a>
-            </div>
+            {{ period_start }}
+            {{ period_end }}
+
             <table class="table table-bordered table-striped table-light">
                 <thead>
                     <tr class="table-primary">
