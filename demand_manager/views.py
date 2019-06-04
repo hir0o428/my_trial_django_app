@@ -6,6 +6,8 @@ from django_filters.views import FilterView
 from django.shortcuts import resolve_url
 from django.utils import timezone
 
+from datetime import datetime
+
 from .models import Demand
 from .forms import LoginForm, DemandCreateForm, DemandUpdateForm, DemandAnalysisForm
 from .filters import DemandFilter, DemandAnalysisFilter
@@ -127,7 +129,15 @@ class DemandAnalysisView(LoginRequiredMixin, FormView):
         context['ser_num_release'] = demand_feature.df_release_feature.max().astype('int64')
         context['ser_required_lic'] = demand_feature.ser_required_lic
         context['df_png_path'] = demand_feature.df_png_path
-        context['period_start'] = period_start
-        context['period_end'] = period_end
+        if type(demand_feature.start_date) is str:
+            context['period_start'] = datetime.strptime(demand_feature.start_date, '%Y-%m-%d')
+        else:
+            context['period_start'] = demand_feature.start_date
+        if type(demand_feature.end_date) is str:
+            context['period_end'] = datetime.strptime(demand_feature.end_date, '%Y-%m-%d')
+        else:
+            context['period_end'] = demand_feature.end_date
+        print("Date: {} - {}".format(demand_feature.start_date, demand_feature.end_date))
+        print(type(demand_feature.start_date))
         return context
 

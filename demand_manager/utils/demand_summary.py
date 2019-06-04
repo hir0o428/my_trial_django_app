@@ -91,8 +91,12 @@ class DemandFeature:
             list_date = pd.date_range(start=start_date, end=end_date, freq='D')
             dict_data = {}
             for base_feature in self.list_base_feature:
-                if self.df_content.at[content, base_feature]:
+                print(base_feature, self.df_content.at[content, base_feature])
+                if self.df_content.at[content, base_feature] is True:
                     dict_data[base_feature] = np.array([frequency] * len(list_date), dtype='int32')
+                elif self.df_content.at[content, base_feature] > 0:
+                    num = self.df_content.at[content, base_feature]
+                    dict_data[base_feature] = np.array([frequency * num] * len(list_date), dtype='int32')
                 else:
                     dict_data[base_feature] = np.array([0] * len(list_date), dtype='int32')
             for tech_feature in self.list_tech_feature:

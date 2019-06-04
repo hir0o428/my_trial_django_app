@@ -11,21 +11,18 @@
     <div>
         <h2>Demand Analysis</h2>
         <div class="container">
-            <h3>Required License Features</h3>
+            <h3>Required License Features: {{ period_start|date:"Y/m/d" }} - {{ period_end|date:"Y/m/d" }}</h3>
             <div class="float-right">
                 <form method="get">
                     <div class="form-row">
                         {{ form|crispy }}
                         <div class="form-group col-md-4">
                             <button type="submit" class="btn btn-info"> Set period </button>
-                            <a class="btn btn-secondary filtered" href="/demand_manager/analysis_test/?page=1"> Reset </a>
+                            <a class="btn btn-secondary filtered" href="/demand_manager/analysis/?page=1"> Reset </a>
                         </div>
                     </div>
                 </form>
             </div>
-            {{ period_start }}
-            {{ period_end }}
-
             <table class="table table-bordered table-striped table-light">
                 <thead>
                     <tr class="table-primary">
@@ -64,7 +61,7 @@
             </table>
         </div>
         <div>
-            <h3>Demand vs Date</h3>
+            <h3>Demand vs Date: {{ period_start|date:"Y/m/d" }} - {{ period_end|date:"Y/m/d" }}</h3>
             {% load static %}
             {% for index, row in df_png_path.iterrows %}
                 <table>

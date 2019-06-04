@@ -50,8 +50,9 @@ class VerificationContent(models.Model):
         blank=False,
         null=False,
     )
-    lic_feature_base_a = models.BooleanField(
+    lic_feature_base_a = models.IntegerField(
         verbose_name='License Feature Base_A',
+        default=0,
     )
     lic_feature_base_b = models.BooleanField(
         verbose_name='License Feature Base_B',
