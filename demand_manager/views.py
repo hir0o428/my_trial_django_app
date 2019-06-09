@@ -6,11 +6,11 @@ from django_filters.views import FilterView
 from django.shortcuts import resolve_url
 from django.utils import timezone
 
-from datetime import datetime
+from datetime import datetime, date
 
 from .models import Demand
 from .forms import LoginForm, DemandCreateForm, DemandUpdateForm, DemandAnalysisForm
-from .filters import DemandFilter, DemandAnalysisFilter
+from .filters import DemandFilter
 from demand_manager.utils.demand_summary import DemandFeature
 
 # Create your views here.
@@ -33,7 +33,7 @@ class DemandTopFilterView(LoginRequiredMixin, FilterView):
     filterset_class = DemandFilter
     template_name = "demand_manager/demand_top_filter.html"
 
-    # paginate_by = 10
+    paginate_by = 10
 
     '''
     def get(self, request, **kwargs):
@@ -50,6 +50,10 @@ class DemandTopFilterView(LoginRequiredMixin, FilterView):
     def get_queryset(self):
         return Demand.objects.all().order_by('start_date')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list_from_today'] = Demand.objects.filter(end_date__gt=date.today()).order_by('start_date')
+        return context
 
 class DemandDetailView(LoginRequiredMixin, DetailView):
     model = Demand
@@ -110,24 +114,22 @@ class DemandAnalysisView(LoginRequiredMixin, FormView):
     template_name = 'demand_manager/demand_analysis.html'
 
     def form_valid(self, form):
-        print("Form saved: {}".format(form))
         form.save()
-        print("Form saved: {}".format(form))
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print("Form: {}".format(self.get_form_kwargs()))
         period_start = self.request.GET.get(key='period_start')
         period_end = self.request.GET.get(key='period_end')
         # Calc Demand Feature
         demand_feature = DemandFeature(period_start, period_end)
         demand_feature.demand_summary()
         context['df_demand_feature'] = demand_feature.df_demand_feature
-        context['ser_pct_demand'] = demand_feature.ser_pct_max_demand
-        context['ser_num_demand'] = demand_feature.ser_num_max_demand
-        context['ser_num_release'] = demand_feature.df_release_feature.max().astype('int64')
-        context['ser_required_lic'] = demand_feature.ser_required_lic
+        # context['ser_pct_demand'] = demand_feature.ser_pct_max_demand
+        # context['ser_num_demand'] = demand_feature.ser_num_max_demand
+        # context['ser_num_release'] = demand_feature.df_release_feature.max().astype('int64')
+        # context['ser_required_lic'] = demand_feature.ser_required_lic
+        context['df_summary'] = demand_feature.df_summary
         context['df_png_path'] = demand_feature.df_png_path
         if type(demand_feature.start_date) is str:
             context['period_start'] = datetime.strptime(demand_feature.start_date, '%Y-%m-%d')
@@ -137,7 +139,5 @@ class DemandAnalysisView(LoginRequiredMixin, FormView):
             context['period_end'] = datetime.strptime(demand_feature.end_date, '%Y-%m-%d')
         else:
             context['period_end'] = demand_feature.end_date
-        print("Date: {} - {}".format(demand_feature.start_date, demand_feature.end_date))
-        print(type(demand_feature.start_date))
         return context
 

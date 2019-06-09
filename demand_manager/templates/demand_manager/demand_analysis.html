@@ -23,6 +23,7 @@
                     </div>
                 </form>
             </div>
+            <!--
             <table class="table table-bordered table-striped table-light">
                 <thead>
                     <tr class="table-primary">
@@ -57,6 +58,32 @@
                             <td>{{ value }}</td>
                         {% endfor %}
                     </tr>
+                </tbody>
+            </table>
+            -->
+            <table class="table table-bordered table-striped table-light">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Feature</th>
+                        {% for column in df_summary.columns %}
+                            <th>{{ column }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, row in df_summary.iterrows %}
+                        <tr>
+                            <th scope="row">{{ index }}</th>
+                            <td>{{ row.0 }}</td>
+                            <td>{{ row.1 }}</td>
+                            <td>{{ row.2 }}</td>
+                            {% if row.3 > 0 %}
+                            <td class="table-info" style="color:red"><strong>{{ row.3 }}</strong></td>
+                            {% else %}
+                                <td class="table-info">{{ row.3 }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

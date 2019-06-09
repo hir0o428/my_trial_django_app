@@ -52,11 +52,12 @@ class DemandFeature:
         # Required Lic
         self.df_required_lic = pd.DataFrame()
         self.ser_required_lic = pd.Series()
+        self.df_summary = pd.DataFrame()
 
         # Release DataFrame
         self.release_feature = ReleaseFeature(self.list_feature, self.start_date, self.end_date)
-        self.release_feature.create_df_release_feature()
-        self.df_release_feature = self.release_feature.df_release_feature
+        self.df_release_feature = pd.DataFrame()
+        self.ser_max_release = pd.Series()
 
         # Setup PNG dir
         self.png_static_dir = "demand_manager/PNG/"
@@ -69,11 +70,15 @@ class DemandFeature:
 
     def demand_summary(self):
 
-        # Create DataFrame of Feature
+        # Create DataFrame of Feature for Demand
         self.create_df_demand_feature()
 
-        # Create Series of Required License Feature
-        self.get_required_lic()
+        # Create DataFrame of Feature for Release
+        self.release_feature.create_df_release_feature()
+        self.df_release_feature = self.release_feature.df_release_feature
+
+        # Summarize Required License Feature
+        self.summary_required_lic()
 
         # Create Figure Demand-Date
         self.create_demand_figure()
@@ -91,7 +96,6 @@ class DemandFeature:
             list_date = pd.date_range(start=start_date, end=end_date, freq='D')
             dict_data = {}
             for base_feature in self.list_base_feature:
-                print(base_feature, self.df_content.at[content, base_feature])
                 if self.df_content.at[content, base_feature] is True:
                     dict_data[base_feature] = np.array([frequency] * len(list_date), dtype='int32')
                 elif self.df_content.at[content, base_feature] > 0:
@@ -111,15 +115,26 @@ class DemandFeature:
         #
         self.df_demand_feature = self.df_demand_feature[self.start_date:self.end_date].fillna(0)
 
-    def get_required_lic(self):
+    def summary_required_lic(self):
         self.df_release_feature = self.df_release_feature[self.start_date:self.end_date].fillna(0)
         self.df_num_demand_feature = self.df_demand_feature.applymap(lambda x: math.ceil(x / 100))
         self.df_required_lic = self.df_num_demand_feature - self.df_release_feature
         self.df_required_lic = self.df_required_lic.mask(self.df_required_lic < 0, 0)
+        self.df_release_feature = self.release_feature.df_release_feature
 
+        # Series for Summary
         self.ser_pct_max_demand = self.df_demand_feature.max().astype('int64')
         self.ser_num_max_demand = self.df_num_demand_feature.max().astype('int64')
+        self.ser_max_release = self.df_release_feature.max().astype('int64')
         self.ser_required_lic = self.df_required_lic.max().astype('int64')
+
+        # Create DataFrame of Summary
+        self.df_summary = pd.concat([self.ser_pct_max_demand,
+                                     self.ser_num_max_demand,
+                                     self.ser_max_release,
+                                     self.ser_required_lic,
+                                     ], axis=1)
+        self.df_summary.columns = ["Demand[%]", "Demand", "Released", "Required"]
 
     def create_demand_figure(self):
         if not os.path.isdir(self.png_dir):
