@@ -1,8 +1,15 @@
 {% extends "./base.html" %}
 {% block page_title %} Demand Manager User Registration Complete {% endblock%}
+
+{% block navbar_title %}Account Management{% endblock%}
+
+{% block navbar_contents %}
+{% include "./top_block_navbar_contents.html" %}
+{% endblock %}
+
 {% block content %}
 <div style="text-align: center; padding-top: 50px;">
     <h2 >User Registration Complete!</h2>
-    <a href="/demand_manager/login/">Login</a>
+    <a href="{% url 'accounts:login' %}">Login</a>
 </div>
 {% endblock %}

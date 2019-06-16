@@ -1,18 +1,8 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 
 from .models import Demand
-
-
-class LoginForm(AuthenticationForm):
-    """Login Form"""
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
-            field.widget.attrs['placeholder'] = field.label
 
 
 class DemandCreateForm(forms.ModelForm):
@@ -21,7 +11,8 @@ class DemandCreateForm(forms.ModelForm):
     class Meta:
         model = Demand
         fields = (
-            'product', 'tech_node',
+            'product', 'product_id',
+            'tech_node',
             'content',
             'start_date', 'end_date',
             'frequency', 'comment'
@@ -60,7 +51,8 @@ class DemandUpdateForm(forms.ModelForm):
     class Meta:
         model = Demand
         fields = (
-            'product', 'tech_node',
+            'product', 'product_id',
+            'tech_node',
             'content',
             'start_date', 'end_date',
             'frequency', 'comment'
@@ -88,4 +80,8 @@ class DemandAnalysisForm(forms.Form):
         label="Date of End",
         initial=date.today() + relativedelta(months=1) - timedelta(days=1),
         widget=forms.DateInput(attrs={"type":"date"}),
+    )
+    reference_hours = forms.IntegerField(
+        label = "Reference hours per day",
+        initial = 8,
     )

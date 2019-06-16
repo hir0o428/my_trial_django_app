@@ -1,6 +1,13 @@
 {% extends "./base.html" %}
 {% load crispy_forms_tags %}
-{% block page_title %} Demand Manager Login {% endblock%}
+{% block page_title %} Login {% endblock%}
+
+{% block navbar_title %}Account Management{% endblock%}
+
+{% block navbar_contents %}
+{% include "./top_block_navbar_contents.html" %}
+{% endblock %}
+
 {% block content %}
 <div style="padding-top: 50px;">
     <form action="" method="POST">
@@ -12,7 +19,7 @@
                     <button type="submit" class="btn btn-lg btn-primary btn-block" >Login</button>
                     <input type="hidden" name="next" value="{{ next }}" />
                     <a class="btn btn-lg btn-outline-primary btn-block mt-2"
-                       href="/accounts/user_registration/"> User Registration</a>
+                       href="{% url 'accounts:user_registration' %}"> User Registration</a>
                 </div>
             </div>
         </div>

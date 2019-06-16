@@ -1,6 +1,13 @@
 {% extends "./base.html" %}
 {% load crispy_forms_tags %}
 {% block page_title %} Demand Manager User Registration {% endblock%}
+
+{% block navbar_title %}Account Management{% endblock%}
+
+{% block navbar_contents %}
+{% include "./top_block_navbar_contents.html" %}
+{% endblock %}
+
 {% block content %}
 <div style="padding:20px 200px 0px 200px;">
     <form action="" method="POST">

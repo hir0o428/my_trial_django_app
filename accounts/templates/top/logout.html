@@ -1,8 +1,15 @@
 {% extends "./base.html" %}
 {% block page_title %} Demand Manager Logout {% endblock %}
+
+{% block navbar_title %}Account Management{% endblock%}
+
+{% block navbar_contents %}
+{% include "./top_block_navbar_contents.html" %}
+{% endblock %}
+
 {% block content %}
     <div style="text-align: center; padding-top: 50px;">
     <h2 >See you!</h2>
-    <a href="../">Login</a>
+    <a href="{% url 'accounts:login' %}">Login</a>
     </div>
 {% endblock %}

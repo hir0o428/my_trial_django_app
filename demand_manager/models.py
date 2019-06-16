@@ -39,6 +39,10 @@ class Release(models.Model):
         null=False,
     )
 
+    class Meta:
+        verbose_name_plural = "Release"
+        ordering = ['lic_feature']
+
     def __str__(self):
         return self.lic_feature + "(" + self.lic_type + ")"
 
@@ -50,24 +54,37 @@ class VerificationContent(models.Model):
         blank=False,
         null=False,
     )
+    dict_lic_feature = {
+        "lic_feature_base_a": "License Feature Base_A",
+        "lic_feature_base_b": "License Feature Base_B",
+        "lic_feature_base_c": "License Feature Base_C",
+        "lic_feature_opt_1": "License Feature Option_1",
+        "lic_feature_opt_2": "License Feature Option_2",
+        "lic_feature_opt_3": "License Feature Option_3",
+    }
     lic_feature_base_a = models.IntegerField(
-        verbose_name='License Feature Base_A',
+        verbose_name=dict_lic_feature['lic_feature_base_a'],
         default=0,
     )
     lic_feature_base_b = models.BooleanField(
-        verbose_name='License Feature Base_B',
+        verbose_name=dict_lic_feature['lic_feature_base_b'],
+        default=False,
     )
     lic_feature_base_c = models.BooleanField(
-        verbose_name='License Feature Base_C',
+        verbose_name=dict_lic_feature['lic_feature_base_c'],
+        default=False,
     )
     lic_feature_opt_1 = models.BooleanField(
-        verbose_name='License Feature Option_1',
+        verbose_name=dict_lic_feature['lic_feature_opt_1'],
+        default=False,
     )
     lic_feature_opt_2 = models.BooleanField(
-        verbose_name='License Feature Option_2',
+        verbose_name=dict_lic_feature['lic_feature_opt_2'],
+        default=False,
     )
     lic_feature_opt_3 = models.BooleanField(
-        verbose_name='License Feature Option_3',
+        verbose_name=dict_lic_feature['lic_feature_opt_3'],
+        default=False,
     )
     user_create = models.ForeignKey(
         User,
@@ -99,6 +116,9 @@ class VerificationContent(models.Model):
         null=True,
         editable=False,
     )
+
+    class Meta:
+        ordering = ['content']
 
     def __str__(self):
         return self.content
@@ -150,6 +170,10 @@ class Technology(models.Model):
         editable=False,
     )
 
+    class Meta:
+        verbose_name_plural = "Technologies"
+        ordering = ['tech_node']
+
     def __str__(self):
         return self.tech_node
 
@@ -160,6 +184,14 @@ class Demand(models.Model):
         max_length=20,
         blank=False,
         null=False,
+        help_text = "<ul>"
+                    "<li>Required</li>"
+                    "</ul>",
+    )
+    product_id = models.IntegerField(
+        verbose_name='Product ID',
+        blank=False,
+        null=True,
         help_text = "<ul>"
                     "<li>Required</li>"
                     "</ul>",
@@ -235,6 +267,10 @@ class Demand(models.Model):
         null=True,
         editable=False,
     )
+
+    class Meta:
+        ordering = ['product']
+
     def __str__(self):
         return self.product
 

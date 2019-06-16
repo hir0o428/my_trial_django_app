@@ -1,0 +1,10 @@
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'demand_manager:create' %}">
+                        <i class="far fa-calendar-plus"></i> Demand Request</a>
+                </li>
+                {% if user.is_staff %}
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'demand_manager:analysis' %}">
+                        <i class="fas fa-chart-bar"></i> Demand Analysis</a>
+                </li>
+                {% endif %}

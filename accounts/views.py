@@ -1,14 +1,28 @@
 from django.views.generic import DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import resolve_url
 
 from .models import User
-from .forms import UserProfileUpdateForm, UserRegistrationForm
+from .forms import LoginForm, UserProfileUpdateForm, UserRegistrationForm
 
 
 # Create your views here.
+class TopLoginView(LoginView):
+    form_class = LoginForm
+    template_name = "top/login.html"
+
+
+class TopLogoutView(LogoutView):
+    template_name = "top/logout.html"
+
+
+class TopView(LoginRequiredMixin, TemplateView):
+    template_name = "top/top.html"
+
+
 class UserRegistrationView(CreateView):
     """User Registration"""
     model = User

@@ -13,14 +13,14 @@ from demand_manager.models import Demand, VerificationContent, Technology, Relea
 
 
 class DemandFeature:
-    def __init__(self, start_date, end_date):
+    def __init__(self, start_date, end_date, ref_hours):
         # Demand
         self.qs_demand = Demand.objects.all()
         self.df_demand = read_frame(self.qs_demand)
         # VerificationContent
         self.qs_content = VerificationContent.objects.all()
         self.df_content = read_frame(self.qs_content, index_col='content')
-        self.list_base_feature = [i for i in list(self.df_content.columns) if re.search(r"lic_feature", i)]
+        self.list_base_feature = list(VerificationContent.dict_lic_feature.keys())
         # Technology
         self.qs_tech = Technology.objects.all()
         self.df_tech = read_frame(self.qs_tech, index_col='tech_node')
@@ -36,6 +36,13 @@ class DemandFeature:
             self.end_date = self.df_demand['end_date'].max()
         else:
             self.end_date = end_date
+
+        self.hours_per_day = 24
+        if ref_hours is None:
+            self.ref_hours = 8
+        else:
+            self.ref_hours = int(ref_hours)
+        self.ratio_hours = float(self.hours_per_day / self.ref_hours)
 
         # Demand DataFrame
         # Create List of License Feature
@@ -97,15 +104,17 @@ class DemandFeature:
             dict_data = {}
             for base_feature in self.list_base_feature:
                 if self.df_content.at[content, base_feature] is True:
-                    dict_data[base_feature] = np.array([frequency] * len(list_date), dtype='int32')
+                    dict_data[base_feature] \
+                        = np.array([frequency * self.ratio_hours] * len(list_date), dtype='int32')
                 elif self.df_content.at[content, base_feature] > 0:
                     num = self.df_content.at[content, base_feature]
-                    dict_data[base_feature] = np.array([frequency * num] * len(list_date), dtype='int32')
+                    dict_data[base_feature] \
+                        = np.array([frequency * self.ratio_hours * num] * len(list_date), dtype='int32')
                 else:
                     dict_data[base_feature] = np.array([0] * len(list_date), dtype='int32')
             for tech_feature in self.list_tech_feature:
                 if self.df_tech.at[tech_node, tech_feature]:
-                    dict_data[tech_feature] = np.array([frequency] * len(list_date), dtype='int32')
+                    dict_data[tech_feature] = np.array([frequency * self.ratio_hours] * len(list_date), dtype='int32')
                 else:
                     dict_data[tech_feature] = np.array([0] * len(list_date), dtype='int32')
             df_product = pd.DataFrame(dict_data, index=list_date)

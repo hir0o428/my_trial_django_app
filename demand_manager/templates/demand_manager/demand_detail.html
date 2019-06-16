@@ -1,5 +1,14 @@
 {% extends "./base.html" %}
 {% block page_title %}Demand Manager Demand Detail{% endblock %}
+
+{% block navbar_title %}
+    <a class="navbar-brand" href="{% url 'demand_manager:top' %}">Demand Manager</a>
+{% endblock%}
+
+{% block navbar_contents %}
+{% include "./demand_block_navbar_contents.html" %}
+{% endblock %}
+
 {% block content %}
 <div style="margin:20px">
     <table class="table table-bordered table-striped table-light">
@@ -7,6 +16,10 @@
             <tr>
                 <th scope="row">Product Name</th>
                 <td>{{  demand.product|default_if_none:"N/A"  }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Product ID</th>
+                <td>{{  demand.product_id|default_if_none:"N/A"  }}</td>
             </tr>
             <tr>
                 <th scope="row">Technology Node</th>

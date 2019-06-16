@@ -3,13 +3,21 @@
 
 {% block page_title %}Demand Manager Top{% endblock %}
 
+{% block navbar_title %}
+    <a class="navbar-brand" href="{% url 'demand_manager:top' %}">Demand Manager</a>
+{% endblock%}
+
+{% block navbar_contents %}
+{% include "./demand_block_navbar_contents.html" %}
+{% endblock %}
+
 {% block content %}
     <div>
         <h1><a href="{% url 'demand_manager:top' %}">Demand Manager</a></h1>
     </div>
     <!-- -->
     <div class="container">
-        <h2>Demand List</h2>
+        <h2>Demand List (Future Use)</h2>
         <div>
             <a class="btn btn-primary" href="{% url 'demand_manager:create' %}">
                 <i class="far fa-calendar-plus"></i> Demand Request </a>
@@ -18,6 +26,7 @@
             <thead>
                 <tr class="table-primary">
                     <th scope="col">Product</th>
+                    <th scope="col">Product ID</th>
                     <th scope="col">Technology Node</th>
                     <th scope="col">Verification</th>
                     <th scope="col">Date of Start</th>
@@ -32,6 +41,7 @@
                         <th scope="row">
                             <a href="{% url 'demand_manager:detail' demand.id %}">{{ demand.product }}</a>
                         </th>
+                        <td>{{ demand.product_id }}</td>
                         <td>{{ demand.tech_node }}</td>
                         <td>{{ demand.content }}</td>
                         <td>{{ demand.start_date|date:"Y/m/d" }}</td>
@@ -54,7 +64,7 @@
 
     <hr>
     <div class="container">
-        <h2>Demand List</h2>
+        <h2>Demand List (All)</h2>
         <div class="modal fade" id="DemandFilterModal" tabindex="-1" role="dialog"
              aria-labelledby="DemandFilterModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -90,6 +100,7 @@
             <thead>
                 <tr class="table-primary">
                     <th scope="col">Product</th>
+                    <th scope="col">Product ID</th>
                     <th scope="col">Technology Node</th>
                     <th scope="col">Verification</th>
                     <th scope="col">Date of Start</th>
@@ -104,6 +115,7 @@
                         <th scope="row">
                             <a href="{% url 'demand_manager:detail' demand.id %}">{{ demand.product }}</a>
                         </th>
+                        <td>{{ demand.product_id }}</td>
                         <td>{{ demand.tech_node }}</td>
                         <td>{{ demand.content }}</td>
                         <td>{{ demand.start_date|date:"Y/m/d" }}</td>

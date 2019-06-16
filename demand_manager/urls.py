@@ -8,9 +8,9 @@ urlpatterns = [
     path('', views.DemandTopFilterView.as_view(), name='top'),
 
     # ex: /demand_manager/login/
-    path('login/', views.DemandLoginView.as_view(), name='login'),
+    #path('login/', views.DemandLoginView.as_view(), name='login'),
     # ex: /demand_manager/logout/
-    path('logout/', views.DemandLogoutView.as_view(), name='logout'),
+    #path('logout/', views.DemandLogoutView.as_view(), name='logout'),
 
     # ex: /demand_manager/create/
     path('create/', views.DemandCreateView.as_view(), name='create'),

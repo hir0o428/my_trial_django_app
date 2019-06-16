@@ -1,6 +1,5 @@
-from django.views.generic import ListView, DetailView, FormView
+from django.views.generic import DetailView, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_filters.views import FilterView
 from django.shortcuts import resolve_url
@@ -9,25 +8,12 @@ from django.utils import timezone
 from datetime import datetime, date
 
 from .models import Demand
-from .forms import LoginForm, DemandCreateForm, DemandUpdateForm, DemandAnalysisForm
+from .forms import DemandCreateForm, DemandUpdateForm, DemandAnalysisForm
 from .filters import DemandFilter
 from demand_manager.utils.demand_summary import DemandFeature
 
+
 # Create your views here.
-class DemandLoginView(LoginView):
-    form_class = LoginForm
-    template_name = "demand_manager/demand_login.html"
-
-
-class DemandLogoutView(LogoutView):
-    template_name = "demand_manager/demand_logout.html"
-
-
-class DemandTopView(LoginRequiredMixin, ListView):
-    model = Demand
-    template_name = "demand_manager/demand_top.html"
-
-
 class DemandTopFilterView(LoginRequiredMixin, FilterView):
     model = Demand
     filterset_class = DemandFilter
@@ -121,8 +107,9 @@ class DemandAnalysisView(LoginRequiredMixin, FormView):
         context = super().get_context_data(**kwargs)
         period_start = self.request.GET.get(key='period_start')
         period_end = self.request.GET.get(key='period_end')
+        reference_hours = self.request.GET.get(key='reference_hours')
         # Calc Demand Feature
-        demand_feature = DemandFeature(period_start, period_end)
+        demand_feature = DemandFeature(period_start, period_end, reference_hours)
         demand_feature.demand_summary()
         context['df_demand_feature'] = demand_feature.df_demand_feature
         # context['ser_pct_demand'] = demand_feature.ser_pct_max_demand
@@ -139,5 +126,6 @@ class DemandAnalysisView(LoginRequiredMixin, FormView):
             context['period_end'] = datetime.strptime(demand_feature.end_date, '%Y-%m-%d')
         else:
             context['period_end'] = demand_feature.end_date
+        context['reference_hours'] = demand_feature.ref_hours
         return context
 
