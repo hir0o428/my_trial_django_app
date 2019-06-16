@@ -2,7 +2,7 @@ from django.views.generic import DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import resolve_url
 
 from .models import User
@@ -36,13 +36,18 @@ class UserRegistrationCompView(TemplateView):
     template_name = 'accounts/user_registration_complete.html'
 
 
-class UserProfileView(LoginRequiredMixin, DetailView):
+class UserOnlyMixin(UserPassesTestMixin):
+    def test_func(self):
+        user = self.request.user
+        return user.pk == self.kwargs['pk'] or user.is_superuser
+
+
+class UserProfileView(UserOnlyMixin, DetailView):
     """User Profile"""
     model = User
     template_name = 'accounts/user_profile.html'
 
-
-class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
+class UserProfileUpdateView(UserOnlyMixin, UpdateView):
     """User Profile Update"""
     model = User
     form_class = UserProfileUpdateForm
@@ -52,7 +57,7 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
         return resolve_url('accounts:profile', pk=self.kwargs['pk'])
 
 
-class UserPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+class UserPasswordChangeView(UserOnlyMixin, PasswordChangeView):
     """User Password Change"""
     model = User
     template_name = 'accounts/user_password_change.html'
@@ -61,6 +66,6 @@ class UserPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
         return resolve_url('accounts:password_complete', pk=self.kwargs['pk'])
 
 
-class UserPasswordChangeCompleteView(LoginRequiredMixin, PasswordChangeDoneView):
+class UserPasswordChangeCompleteView(UserOnlyMixin, PasswordChangeDoneView):
     """User Password Change Complete"""
     template_name = 'accounts/user_password_change_complete.html'

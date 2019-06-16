@@ -2,7 +2,9 @@
 {% load crispy_forms_tags %}
 {% block page_title %} Login {% endblock%}
 
-{% block navbar_title %}Account Management{% endblock%}
+{% block navbar_title %}
+    <a class="navbar-brand" href="#">Account Management</a>
+{% endblock %}
 
 {% block navbar_contents %}
 {% include "./top_block_navbar_contents.html" %}
