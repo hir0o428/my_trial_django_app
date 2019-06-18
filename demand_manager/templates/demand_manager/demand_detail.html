@@ -63,14 +63,18 @@
             </tr>
         </tbody>
     </table>
-    <a href="{% url 'demand_manager:update' demand.pk %}" class="btn btn-primary"><i class="fas fa-edit"></i> Update</a>
+    <a href="{% url 'demand_manager:update' demand.pk %}" class="btn btn-primary"><i class="fas fa-edit"></i>Update</a>
+    <a href="{% url 'demand_manager:delete' demand.pk %}" class="btn btn-secondary"><i class="fas fa-eraser"></i>Delete</a>
+    <!--
     <a class="btn btn-secondary"
        data-toggle="modal" data-target="#DeleteDemandModal" data-deleteurl="{% url 'demand_manager:delete' demand.pk %}">
         <i class="fas fa-eraser"></i> Delete
     </a>
+    -->
     <a href="/demand_manager/" class="btn btn-primary">Back</a>
 </div>
 
+<!--
 <div class="modal fade" id="DeleteDemandModal" tabindex="-1" role="dialog"
      aria-labelledby="DeleteDemandModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -94,6 +98,7 @@
       </form>
   </div>
 </div>
+-->
 
 {% endblock %}
 

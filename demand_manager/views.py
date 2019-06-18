@@ -8,7 +8,7 @@ from django.utils import timezone
 from datetime import datetime, date
 
 from .models import Demand
-from .forms import DemandCreateForm, DemandUpdateForm, DemandAnalysisForm
+from .forms import DemandCreateForm, DemandUpdateForm, DemandAnalysisForm, ImportReleasedLicenseForm
 from .filters import DemandFilter
 from demand_manager.utils.demand_summary import DemandFeature
 
@@ -92,6 +92,7 @@ class DemandUpdateView(LoginRequiredMixin, UpdateView):
 
 class DemandDeleteView(LoginRequiredMixin, DeleteView):
     model = Demand
+    template_name = 'demand_manager/demand_delete_confirm.html'
     success_url = '/demand_manager'
 
 
@@ -129,3 +130,7 @@ class DemandAnalysisView(LoginRequiredMixin, FormView):
         context['reference_hours'] = demand_feature.ref_hours
         return context
 
+
+class ImportReleasedLicenseView(LoginRequiredMixin, FormView):
+    form_class = ImportReleasedLicenseForm
+    template_name = 'demand_manager/import_released_license.html'

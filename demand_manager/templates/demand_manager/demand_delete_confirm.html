@@ -1,0 +1,49 @@
+{% extends "./base.html" %}
+{% load crispy_forms_tags %}
+{% block page_title %} Demand Manager Demand Delete {% endblock%}
+
+{% block navbar_title %}
+    <a class="navbar-brand" href="{% url 'demand_manager:top' %}">Demand Manager</a>
+{% endblock%}
+
+{% block navbar_contents %}
+{% include "./demand_block_navbar_contents.html" %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h2>Deletion confirmation</h2>
+    <hr>
+    <p>Do you want to delete this demand?</p>
+    <table class="table table-bordered table-striped table-light">
+        <thead>
+            <tr class="table-primary">
+                <th scope="col">Product</th>
+                <th scope="col">Product ID</th>
+                <th scope="col">Technology Node</th>
+                <th scope="col">Verification</th>
+                <th scope="col">Date of Start</th>
+                <th scope="col">Date of End</th>
+                <th scope="col">Frequency [%]</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">{{ demand.product }}</th>
+                <td>{{ demand.product_id }}</td>
+                <td>{{ demand.tech_node }}</td>
+                <td>{{ demand.content }}</td>
+                <td>{{ demand.start_date|date:"Y/m/d" }}</td>
+                <td>{{ demand.end_date|date:"Y/m/d"}}</td>
+                <td>{{ demand.frequency }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-secondary">Delete</button>
+        <a href="{% url 'demand_manager:top' %}" class="btn btn-primary">Back</a>
+    </form>
+</div>
+{% endblock %}

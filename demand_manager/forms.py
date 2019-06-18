@@ -2,7 +2,7 @@ from django import forms
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 
-from .models import Demand
+from .models import Demand, Release
 
 
 class DemandCreateForm(forms.ModelForm):
@@ -84,4 +84,15 @@ class DemandAnalysisForm(forms.Form):
     reference_hours = forms.IntegerField(
         label = "Reference hours per day",
         initial = 8,
+    )
+
+
+class ImportReleasedLicenseForm(forms.Form):
+    license_type = forms.ChoiceField(
+        label="License Type",
+        choices=Release.lic_type_choice,
+    )
+    license_file = forms.FileField(
+        label="License File",
+        help_text="Set License File."
     )
