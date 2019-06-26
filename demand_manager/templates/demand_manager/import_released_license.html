@@ -1,7 +1,7 @@
 {% extends "./base.html" %}
 {% load crispy_forms_tags %}
 
-{% block page_title %} Demand Manager Demand Creation {% endblock%}
+{% block page_title %} Demand Manager Import Released License {% endblock%}
 
 {% block navbar_title %}
     <a class="navbar-brand" href="{% url 'demand_manager:top' %}">Demand Manager</a>
@@ -15,9 +15,9 @@
 <div>
     <h1><a href="{% url 'demand_manager:top' %}">Demand Manager</a></h1>
 </div>
-<h2>Add Demand</h2>
+<h2>Import Released License File</h2>
 <div style="padding:20px 200px 0px 200px;">
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
         {{ form|crispy }}
         {% csrf_token %}
         <button type="submit" class="btn btn-primary btn-lg">Add</button>

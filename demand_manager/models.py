@@ -32,6 +32,7 @@ class Release(models.Model):
     end_date = models.DateField(
         verbose_name='End Date',
         blank=False,
+        null=False,
     )
     num_lic_feature = models.IntegerField(
         verbose_name='Number of Released License Feature',

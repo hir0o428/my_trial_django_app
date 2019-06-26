@@ -1,9 +1,12 @@
+import io
+import os
 from django.views.generic import DetailView, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_filters.views import FilterView
 from django.shortcuts import resolve_url
 from django.utils import timezone
+from django.urls import reverse_lazy
 
 from datetime import datetime, date
 
@@ -11,6 +14,7 @@ from .models import Demand
 from .forms import DemandCreateForm, DemandUpdateForm, DemandAnalysisForm, ImportReleasedLicenseForm
 from .filters import DemandFilter
 from demand_manager.utils.demand_summary import DemandFeature
+from demand_manager.utils.import_lic import ReleaseLic
 
 
 # Create your views here.
@@ -113,10 +117,6 @@ class DemandAnalysisView(LoginRequiredMixin, FormView):
         demand_feature = DemandFeature(period_start, period_end, reference_hours)
         demand_feature.demand_summary()
         context['df_demand_feature'] = demand_feature.df_demand_feature
-        # context['ser_pct_demand'] = demand_feature.ser_pct_max_demand
-        # context['ser_num_demand'] = demand_feature.ser_num_max_demand
-        # context['ser_num_release'] = demand_feature.df_release_feature.max().astype('int64')
-        # context['ser_required_lic'] = demand_feature.ser_required_lic
         context['df_summary'] = demand_feature.df_summary
         context['df_png_path'] = demand_feature.df_png_path
         if type(demand_feature.start_date) is str:
@@ -134,3 +134,9 @@ class DemandAnalysisView(LoginRequiredMixin, FormView):
 class ImportReleasedLicenseView(LoginRequiredMixin, FormView):
     form_class = ImportReleasedLicenseForm
     template_name = 'demand_manager/import_released_license.html'
+    success_url = reverse_lazy('demand_manager:top')
+
+    def form_valid(self, form):
+        lic_type, download_url = form.upload()
+        ReleaseLic(lic_type, os.getcwd() + download_url).add_feature2db()
+        return super().form_valid(form)

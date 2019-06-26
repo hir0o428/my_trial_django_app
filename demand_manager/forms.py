@@ -1,6 +1,7 @@
 from django import forms
 from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
+from django.core.files.storage import default_storage
 
 from .models import Demand, Release
 
@@ -94,5 +95,12 @@ class ImportReleasedLicenseForm(forms.Form):
     )
     license_file = forms.FileField(
         label="License File",
-        help_text="Set License File."
+        help_text="Set License File.",
     )
+
+    def upload(self):
+        upload_file = self.cleaned_data['license_file']
+        license_type = self.cleaned_data['license_type']
+        file_name = default_storage.save("demand_manager/license/" + upload_file.name, upload_file)
+        return license_type, default_storage.url(file_name)
+

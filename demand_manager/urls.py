@@ -22,4 +22,6 @@ urlpatterns = [
     path('<int:pk>/delete/', views.DemandDeleteView.as_view(), name='delete'),
     # ex: /demand_manager/analysis/
     path('analysis/', views.DemandAnalysisView.as_view(), name='analysis'),
+    # ex: /demand_manager/import/
+    path('import/', views.ImportReleasedLicenseView.as_view(), name='import'),
 ]
