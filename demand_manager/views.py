@@ -1,5 +1,6 @@
 import io
 import os
+import logging
 from django.views.generic import DetailView, FormView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,6 +16,8 @@ from .forms import DemandCreateForm, DemandUpdateForm, DemandAnalysisForm, Impor
 from .filters import DemandFilter
 from demand_manager.utils.demand_summary import DemandFeature
 from demand_manager.utils.import_lic import ReleaseLic
+
+logger = logging.getLogger(__name__)
 
 
 # Create your views here.
@@ -45,6 +48,7 @@ class DemandTopFilterView(LoginRequiredMixin, FilterView):
         context['object_list_from_today'] = Demand.objects.filter(end_date__gt=date.today()).order_by('start_date')
         return context
 
+
 class DemandDetailView(LoginRequiredMixin, DetailView):
     model = Demand
     template_name = 'demand_manager/demand_detail.html'
@@ -69,6 +73,12 @@ class DemandCreateView(LoginRequiredMixin, CreateView):
         demand.time_update = timezone.now()
         demand.save()
 
+        # Send Mail
+        form.send_email()
+
+        logger.info('Demand({0}) registered by {1}'
+                    .format(form.cleaned_data['product'], demand.user_create))
+
         return super().form_valid(form)
 
 
@@ -90,6 +100,9 @@ class DemandUpdateView(LoginRequiredMixin, UpdateView):
         demand.user_update = self.request.user
         demand.time_update = timezone.now()
         demand.save()
+
+        logger.info('Demand({0}) updated by user id({1})'
+                    .format(form.cleaned_data['product'], demand.user_update))
 
         return super().form_valid(form)
 

@@ -1,0 +1,6 @@
+To: {{ user.email }}
+
+Please access the site from the below URL and finish user registration.
+
+URL(User Registration)
+{{ protocol }}://{{ domain }}{% url 'accounts:user_registration_complete' token %}

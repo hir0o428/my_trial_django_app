@@ -30,6 +30,6 @@
         </tbody>
     </table>
     <a href="{% url 'accounts:profile_update' user.pk %}" class="btn btn-primary ">Update</a>
-    <a href="{% url 'accounts:password' user.pk %}" class="btn btn-primary">Change Password</a>
+    <a href="{% url 'accounts:password_change' user.pk %}" class="btn btn-primary">Change Password</a>
 </div>
 {% endblock %}

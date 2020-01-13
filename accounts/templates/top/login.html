@@ -20,6 +20,8 @@
                     {% csrf_token %}
                     <button type="submit" class="btn btn-lg btn-primary btn-block" >Login</button>
                     <input type="hidden" name="next" value="{{ next }}" />
+                    <a class="btn btn-lg btn-warning btn-block mt-2"
+                       href="{% url 'accounts:password_reset' %}"> Password Reset</a>
                     <a class="btn btn-lg btn-outline-primary btn-block mt-2"
                        href="{% url 'accounts:user_registration' %}"> User Registration</a>
                 </div>
